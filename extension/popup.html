@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phishing Detection</title>
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(145deg, #f0f4f8, #e6eef5);
+      color: #333;
+      border-radius: 10px;
+    }
+    h1 {
+      font-size: 22px;
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    #evaluate {
+      display: block;
+      width: 80%;
+      margin: 0 auto 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #fff;
+      background: linear-gradient(135deg, #6e48aa, #9d50bb);
+      border: none;
+      border-radius: 50px;
+      box-shadow: 
+        0 10px 20px rgba(157, 80, 187, 0.3),
+        0 6px 6px rgba(157, 80, 187, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 -3px 0 rgba(0, 0, 0, 0.15) inset;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    #evaluate:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    #evaluate:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 15px 25px rgba(157, 80, 187, 0.4),
+        0 10px 10px rgba(157, 80, 187, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+        0 -3px 0 rgba(0, 0, 0, 0.15) inset;
+    }
+    #evaluate:hover:before {
+      left: 100%;
+    }
+    #evaluate:active {
+      transform: translateY(2px);
+      box-shadow: 
+        0 5px 10px rgba(157, 80, 187, 0.4),
+        0 3px 3px rgba(157, 80, 187, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+    }
+    #result {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    #result p {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+    .small {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin: 2px 0;
+      font-style: italic;
+    }
+    .detection-result {
+      font-weight: 600;
+    }
+    .safe {
+      color: #27ae60;
+    }
+    .danger {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Phishing Detection</h1>
+  <button id="evaluate">Evaluate Website</button>
+  <div id="result"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
