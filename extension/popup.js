@@ -15,6 +15,8 @@ document.getElementById('evaluate').addEventListener('click', () => {
             <p class="small">URL: ${response.metadata.url}</p>
             <p class="small">Timestamp: ${response.metadata.timestamp}</p>
             <p class="small">Model: ${response.metadata.model.random_forest.name} v${response.metadata.model.random_forest.version}</p>
+            <p class="small">Confidence: ${(response.metadata.model.random_forest.raw_score * 100).toFixed(2)}%</p>
+            <p class="small">Threshold: ${(response.metadata.model.random_forest.threshold_used * 100).toFixed(2)}%</p>
           ` : ''}
         `;
       } else {

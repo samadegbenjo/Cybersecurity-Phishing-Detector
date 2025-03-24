@@ -49,7 +49,7 @@ pip install flask scikit-learn pandas numpy joblib onnx onnxruntime skl2onnx
    python model_training.py
    ```
 
-This will generate the necessary model files: `rf_model.pkl`, `rf_model.onnx`, `scaler.pkl`, and `pca.pkl`.
+This will generate the necessary model files: `rf_model.pkl`, `rf_model.onnx`, `scaler.pkl`, `pca.pkl`, and `threshold.txt`.
 
 ### Step 3: Start the Flask Server
 
@@ -82,6 +82,7 @@ This will start the Flask server on http://localhost:5000.
 - **Algorithm**: Random Forest Classifier
 - **Feature Preprocessing**: StandardScaler and PCA (Principal Component Analysis)
 - **Model Format**: ONNX (Open Neural Network Exchange)
+- **Threshold**: Optimized decision threshold for balanced precision/recall
 
 ### Features Extracted
 The system extracts 100+ features from the website, including:
