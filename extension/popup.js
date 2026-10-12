@@ -1,27 +1,30 @@
-document.getElementById('evaluate').addEventListener('click', () => {
-  // Show loading state
-  const resultDiv = document.getElementById('result');
-  resultDiv.innerHTML = `<p>Analyzing website...</p>`;
-  
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'evaluate' }, (response) => {
-      if (response) {
-        const resultClass = response.phishing ? 'danger' : 'safe';
-        const resultText = response.phishing ? 'Phishing detected!' : 'No phishing detected.';
-        
-        resultDiv.innerHTML = `
-          <p class="detection-result ${resultClass}">Random Forest: ${resultText}</p>
-          ${response.metadata ? `
-            <p class="small">URL: ${response.metadata.url}</p>
-            <p class="small">Timestamp: ${response.metadata.timestamp}</p>
-            <p class="small">Model: ${response.metadata.model.random_forest.name} v${response.metadata.model.random_forest.version}</p>
-            <p class="small">Confidence: ${(response.metadata.model.random_forest.raw_score * 100).toFixed(2)}%</p>
-            <p class="small">Threshold: ${(response.metadata.model.random_forest.threshold_used * 100).toFixed(2)}%</p>
-          ` : ''}
-        `;
-      } else {
-        resultDiv.innerHTML = '<p class="danger">Error evaluating the page.</p>';
-      }
-    });
-  });
-});
+const result = document.getElementById('result');
+function show(data) {
+  result.replaceChildren();
+  result.dataset.state=data.state;
+  const lines=[data.text];
+  if (data.observations) lines.push('URL observations: ' + JSON.stringify(data.observations));
+  lines.push('Risk score: ' + (data.risk_score === undefined ? 'unavailable' : data.risk_score.toFixed(4)));
+  lines.push('Model threshold: ' + (data.threshold == null ? 'unavailable' : data.threshold.toFixed(4)));
+  for (const line of lines) {
+    const paragraph=document.createElement('p');
+    paragraph.textContent=line;
+    result.appendChild(paragraph);
+  }
+}
+async function busy(button, operation) {
+  button.disabled=true;
+  show({state:'pending',text:'Evaluating…'});
+  try { show(await operation()); }
+  catch (error) { show({state:'unable',text:'Unable to evaluate: ' + error.message}); }
+  finally { button.disabled=false; }
+}
+document.getElementById('evaluate').addEventListener('click', event => busy(event.target, async () => {
+  const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
+  return PhishingClient.observePage(tab?.url);
+}));
+document.getElementById('record').addEventListener('change', event => busy(event.target, async () => {
+  const file=event.target.files[0];
+  if (!file || file.size>64000) throw new Error('Choose a feature-record JSON file under 64 KB');
+  return PhishingClient.evaluateRecord(JSON.parse(await file.text()));
+}));
