@@ -1,0 +1,255 @@
+{
+  "version": "live-url-v1",
+  "mode": "live_url",
+  "features": [
+    {
+      "name": "qty_dot_url",
+      "type": "integer",
+      "meaning": "count (.) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_hyphen_url",
+      "type": "integer",
+      "meaning": "count (-) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_underline_url",
+      "type": "integer",
+      "meaning": "count (_) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_slash_url",
+      "type": "integer",
+      "meaning": "count (/) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_questionmark_url",
+      "type": "integer",
+      "meaning": "count (?) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_equal_url",
+      "type": "integer",
+      "meaning": "count (=) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_at_url",
+      "type": "integer",
+      "meaning": "count (@) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_and_url",
+      "type": "integer",
+      "meaning": "count (&) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_exclamation_url",
+      "type": "integer",
+      "meaning": "count (!) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_space_url",
+      "type": "integer",
+      "meaning": "count ( ) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_tilde_url",
+      "type": "integer",
+      "meaning": "count (~) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_comma_url",
+      "type": "integer",
+      "meaning": "count (,) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_plus_url",
+      "type": "integer",
+      "meaning": "count (+) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_asterisk_url",
+      "type": "integer",
+      "meaning": "count (*) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_hashtag_url",
+      "type": "integer",
+      "meaning": "count (#) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_dollar_url",
+      "type": "integer",
+      "meaning": "count ($) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_percent_url",
+      "type": "integer",
+      "meaning": "count (%) in URL",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "length_url",
+      "type": "integer",
+      "meaning": "URL length",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_dot_domain",
+      "type": "integer",
+      "meaning": "count (.) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_hyphen_domain",
+      "type": "integer",
+      "meaning": "count (-) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_underline_domain",
+      "type": "integer",
+      "meaning": "count (_) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_slash_domain",
+      "type": "integer",
+      "meaning": "count (/) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_questionmark_domain",
+      "type": "integer",
+      "meaning": "count (?) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_equal_domain",
+      "type": "integer",
+      "meaning": "count (=) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_at_domain",
+      "type": "integer",
+      "meaning": "count (@) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_and_domain",
+      "type": "integer",
+      "meaning": "count (&) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_exclamation_domain",
+      "type": "integer",
+      "meaning": "count (!) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_space_domain",
+      "type": "integer",
+      "meaning": "count ( ) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_tilde_domain",
+      "type": "integer",
+      "meaning": "count (~) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_comma_domain",
+      "type": "integer",
+      "meaning": "count (,) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_plus_domain",
+      "type": "integer",
+      "meaning": "count (+) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_asterisk_domain",
+      "type": "integer",
+      "meaning": "count (*) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_hashtag_domain",
+      "type": "integer",
+      "meaning": "count (#) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_dollar_domain",
+      "type": "integer",
+      "meaning": "count ($) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_percent_domain",
+      "type": "integer",
+      "meaning": "count (%) in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "qty_vowels_domain",
+      "type": "integer",
+      "meaning": "count vowels in domain",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "domain_length",
+      "type": "integer",
+      "meaning": "domain length",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "domain_in_ip",
+      "type": "integer",
+      "meaning": "URL domain in IP address format",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    },
+    {
+      "name": "server_client_domain",
+      "type": "integer",
+      "meaning": "domain contains the keywords \"server\" or \"client\"",
+      "missing": "not allowed; computed deterministically from a supported URL"
+    }
+  ],
+  "label": {
+    "name": "phishing",
+    "positive": 1,
+    "negative": 0
+  },
+  "normalization": "urllib.parse.urlparse; lexical=netloc+path+params+query+fragment, excluding scheme and separators; host=netloc including userinfo/port; no percent-decoding",
+  "evidence": {
+    "repository": "https://github.com/gregavrbancic/url-feature-extractor",
+    "commit": "15545d8186e0efd02fd879aee394dcffb9296933",
+    "files": [
+      "lib/functions.py:start_url/count/count_vowels/valid_ip/check_word_server_client",
+      "extract.py:74-120"
+    ]
+  },
+  "notes": "Subset semantics verified against isolated upstream pure functions on controlled URLs; historical full-corpus extraction provenance not established. No TLD list, directory/file/query absent-component rules, DNS, WHOIS, timing or HTML features."
+}

@@ -1,2 +1,2 @@
-// Retired: no content script is injected. URL observations come from activeTab.
-// Dataset features cannot be reconstructed reliably from the webpage.
+// No content script is needed: popup reads activeTab URL, server computes the 39 lexical features.
+// HTML, DOM, credentials, DNS and WHOIS are not inspected.

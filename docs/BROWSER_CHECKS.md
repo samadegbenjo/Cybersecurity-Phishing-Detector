@@ -1,13 +1,15 @@
-# Controlled native Chrome checklist (not yet executed)
+# Native Chrome controlled-page checklist (not yet executed)
 
-The automated integration uses the popup's actual client code in Node, a real loopback API and mocked DOM rendering. It does not exercise Chrome extension loading, activeTab grants, native CORS or local-network policies.
+Node tests use the actual popup client plus a real loopback API, and mock tab/DOM behavior. They do not execute Chrome permissions or UI.
 
-1. Train and export a record with README commands. Load unpacked `extension/` in Chrome Developer mode and note its ID.
-2. Start `python app.py --extension-id YOUR_ID`. In a second terminal run `python -m http.server 8000 --bind 127.0.0.1 --directory tests/fixtures`.
-3. Visit `http://127.0.0.1:8000/controlled.html`. Open popup, click Observe. Expect Unable to evaluate, real observations, unavailable score and frozen offline threshold. No live model verdict is allowed.
-4. Choose `artifacts/record.json`. Expect offline score, threshold and either suspicious or below threshold; changing the active URL must not change this record's prediction.
-5. Stop API, repeat: expect Unable to evaluate. Restart and confirm recovery.
-6. Try chrome://extensions and an invalid record JSON. Expect Unsupported page or request error.
-7. Inspect popup DevTools network: requests only to http://127.0.0.1:5000, originating from extension popup; no content-script requests, arbitrary URL fetches or third-party services. Confirm Origin matches the exact configured ID and any needed preflight succeeds.
-8. If a browser local-network prompt occurs, record Chrome version/policy and allow/deny results. Denied access must remain Unable to evaluate. Do not disable protections. Test on the target professor's browser separately before asserting compatibility.
-9. Record Chrome version, OS, extension ID, backend command and actual outcomes in reports/VALIDATION.md. No live phishing site is needed.
+1. Train both models and export an offline record using README commands. Load unpacked extension in Chrome Developer mode and note ID.
+2. Run `python app.py --extension-id YOUR_ID`. In another terminal run `python -m http.server 8000 --bind 127.0.0.1 --directory tests/fixtures`.
+3. Visit `http://127.0.0.1:8000/controlled.html?check=1`. Click **Evaluate active page**. Expect Active URL, numeric score, live threshold .712132751457169 (for the recorded dataset/seed), captured URL and URL-only limitation. Either suspicious or below threshold is permissible; no site-safety guarantee.
+4. Change the URL to `/controlled.html?check=123&extra=1`, click again and confirm the actual captured URL/request changed. The score may or may not change: equal predictions are possible.
+5. Load artifacts/record.json separately. Expect explicitly Offline record and the offline threshold; changing the active page must not alter this record's score.
+6. Stop the API and repeat both operations: expect Unable to evaluate. Restart to confirm recovery. Try chrome://extensions and a malformed record: expect an error.
+7. Inspect popup DevTools: requests only to 127.0.0.1:5000, from extension context, no content-script network traffic. `/predict-url` request has actual URL and live-url-v1; response has 39 measurements. Confirm any preflight and exact configured Origin allowlist.
+8. Record Chrome version/OS/policies and any Local Network Access allow/deny prompt behavior. Denied local access must stay Unable to evaluate; do not disable protections to claim compatibility.
+9. Confirm all external strings are rendered as text. Record actual outcomes in reports/VALIDATION.md before asserting native compatibility.
+
+No live phishing URL is needed. Local synthetic page contents are not training/evaluation data; live benchmark metrics came from the historical CSV.

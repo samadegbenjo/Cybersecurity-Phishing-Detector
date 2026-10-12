@@ -3,6 +3,8 @@ function show(data) {
   result.replaceChildren();
   result.dataset.state=data.state;
   const lines=[data.text];
+  if (data.evaluated_url) lines.push('URL evaluated: ' + data.evaluated_url);
+  if (data.limitation) lines.push(data.limitation);
   if (data.observations) lines.push('URL observations: ' + JSON.stringify(data.observations));
   lines.push('Risk score: ' + (data.risk_score === undefined ? 'unavailable' : data.risk_score.toFixed(4)));
   lines.push('Model threshold: ' + (data.threshold == null ? 'unavailable' : data.threshold.toFixed(4)));
@@ -21,7 +23,7 @@ async function busy(button, operation) {
 }
 document.getElementById('evaluate').addEventListener('click', event => busy(event.target, async () => {
   const [tab]=await chrome.tabs.query({active:true,currentWindow:true});
-  return PhishingClient.observePage(tab?.url);
+  return PhishingClient.evaluatePage(tab?.url);
 }));
 document.getElementById('record').addEventListener('change', event => busy(event.target, async () => {
   const file=event.target.files[0];

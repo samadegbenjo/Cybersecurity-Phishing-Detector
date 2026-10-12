@@ -18,7 +18,8 @@ try:
         try:
             with urlopen('http://127.0.0.1:5000/health',timeout=.5) as r:
                 import json
-                if not json.load(r)['model_ready']: raise RuntimeError('Train model first')
+                health=json.load(r)
+                if not health['model_ready'] or not health['live_model_ready']: raise RuntimeError('Train both offline and live models first')
             break
         except OSError: time.sleep(.1)
     else: raise RuntimeError('API did not become ready')
@@ -28,3 +29,5 @@ finally:
     process.terminate()
     process.wait(timeout=5)
 subprocess.run(['node','-e',"const c=require('./extension/client.js'); c.evaluateRecord({}).then(r=>{if(r.state!=='unable')process.exit(1); console.log('Actual unreachable backend:',r.text)})"],cwd=ROOT,check=True)
+
+subprocess.run(["node","-e","const c=require('./extension/client.js'); c.evaluatePage('http://127.0.0.1:8000/controlled.html').then(r=>{if(r.state!=='unable')process.exit(1); console.log('Actual unreachable backend for active page:',r.text)})"],cwd=ROOT,check=True)

@@ -13,23 +13,33 @@
       return await response.json();
     } finally { clearTimeout(timer); }
   }
-  function validPrediction(data) {
-    return data && data.mode === 'offline' && data.schema_version === 'offline-v1' &&
+  function validPrediction(data, mode = "offline") {
+    return data && data.mode === mode && data.schema_version === (mode === 'offline' ? 'offline-v1' : 'live-url-v1') &&
       typeof data.phishing === 'boolean' && typeof data.risk_score === 'number' &&
       Number.isFinite(data.risk_score) && data.risk_score >= 0 && data.risk_score <= 1 &&
       typeof data.threshold === 'number' && Number.isFinite(data.threshold) && data.threshold >= 0 && data.threshold <= 1 &&
       data.phishing === (data.risk_score >= data.threshold) &&
       data.state === (data.phishing ? 'suspicious' : 'below_threshold');
   }
-  function decision(data) {
-    if (!validPrediction(data)) throw new Error('Invalid prediction response');
+  function decision(data, mode = "offline") {
+    if (!validPrediction(data, mode)) throw new Error('Invalid prediction response');
     return {state: data.phishing ? 'suspicious' : 'below_threshold',
-      text: data.phishing ? 'Offline record: suspicious' : 'Offline record: below threshold (safety unverified)',
+      text: (mode === 'offline' ? 'Offline record: ' : 'Active URL: ') + (data.phishing ? 'suspicious' : 'below threshold (safety unverified)'),
       risk_score: data.risk_score, threshold: data.threshold};
   }
   async function evaluateRecord(record, fetcher, timeoutMs) {
     try { return decision(await post('/predict', record, fetcher, timeoutMs)); }
     catch (error) { return {state: 'unable', text: 'Unable to evaluate: ' + error.message}; }
+  }
+  async function evaluatePage(url, fetcher, timeoutMs) {
+    try {
+      const parsed = new URL(url);
+      if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('Unsupported page');
+      const data = await post('/predict-url', {schema_version: 'live-url-v1', url}, fetcher, timeoutMs);
+      const result = decision(data, 'live_url');
+      if (data.feature_count !== 39 || typeof data.limitation !== 'string') throw new Error('Invalid live metadata');
+      return {...result, evaluated_url:url, limitation:data.limitation};
+    } catch (error) { return {state:'unable',text:'Unable to evaluate: ' + error.message}; }
   }
   async function observePage(url, fetcher, timeoutMs) {
     try {
@@ -46,7 +56,7 @@
       return {state:'unable',text:'Unable to evaluate: ' + data.reason,observations:o,threshold:data.threshold};
     } catch (error) { return {state:'unable',text:'Unable to evaluate: ' + error.message}; }
   }
-  const api={post,decision,evaluateRecord,observePage};
+  const api={post,decision,evaluateRecord,evaluatePage,observePage};
   if (typeof module !== 'undefined' && module.exports) module.exports=api;
   else root.PhishingClient=api;
 })(globalThis);

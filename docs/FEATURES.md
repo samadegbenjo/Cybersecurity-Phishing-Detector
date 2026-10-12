@@ -1,5 +1,7 @@
 # Ordered offline feature contract
 
+This is the 111-field offline contract. The separately trained active-URL model uses the verified lexical subset described in LIVE_FEATURES.md and live_schema.json; it does not fill unavailable fields in this contract.
+
 Upstream descriptions verified in author repository README at commit 19674806813c1205d8c12bae99c15c5a735a4ac9. Exact extraction and sentinel semantics remain unverified; offline-only contract.
 
 Names are mandatory; JSON object order is ignored and reordered to this schema. null is permitted, explicit, and imputed using training medians; no absent keys or fabricated browser values. External -1 values become null/missing; structural -1 is retained as an absent-component code (both interpretations are explicit assumptions). All-missing records and all-missing training columns are rejected.
