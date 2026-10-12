@@ -1,0 +1,1011 @@
+{
+  "version": "offline-v1",
+  "mode": "offline",
+  "label": {
+    "name": "phishing",
+    "positive": 1,
+    "negative": 0
+  },
+  "features": [
+    {
+      "name": "qty_dot_url",
+      "type": "integer",
+      "meaning": "Count of literal '.' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (.) in URL"
+    },
+    {
+      "name": "qty_hyphen_url",
+      "type": "integer",
+      "meaning": "Count of literal '-' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (-) in URL"
+    },
+    {
+      "name": "qty_underline_url",
+      "type": "integer",
+      "meaning": "Count of literal '_' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (_) in URL"
+    },
+    {
+      "name": "qty_slash_url",
+      "type": "integer",
+      "meaning": "Count of literal '/' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (/) in URL"
+    },
+    {
+      "name": "qty_questionmark_url",
+      "type": "integer",
+      "meaning": "Count of literal '?' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (?) in URL"
+    },
+    {
+      "name": "qty_equal_url",
+      "type": "integer",
+      "meaning": "Count of literal '=' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (=) in URL"
+    },
+    {
+      "name": "qty_at_url",
+      "type": "integer",
+      "meaning": "Count of literal '@' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (@) in URL"
+    },
+    {
+      "name": "qty_and_url",
+      "type": "integer",
+      "meaning": "Count of literal '&' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (&) in URL"
+    },
+    {
+      "name": "qty_exclamation_url",
+      "type": "integer",
+      "meaning": "Count of literal '!' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (!) in URL"
+    },
+    {
+      "name": "qty_space_url",
+      "type": "integer",
+      "meaning": "Count of literal ' ' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ( ) in URL"
+    },
+    {
+      "name": "qty_tilde_url",
+      "type": "integer",
+      "meaning": "Count of literal '~' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (~) in URL"
+    },
+    {
+      "name": "qty_comma_url",
+      "type": "integer",
+      "meaning": "Count of literal ',' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (,) in URL"
+    },
+    {
+      "name": "qty_plus_url",
+      "type": "integer",
+      "meaning": "Count of literal '+' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (+) in URL"
+    },
+    {
+      "name": "qty_asterisk_url",
+      "type": "integer",
+      "meaning": "Count of literal '*' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (*) in URL"
+    },
+    {
+      "name": "qty_hashtag_url",
+      "type": "integer",
+      "meaning": "Count of literal '#' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (#) in URL"
+    },
+    {
+      "name": "qty_dollar_url",
+      "type": "integer",
+      "meaning": "Count of literal '$' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ($) in URL"
+    },
+    {
+      "name": "qty_percent_url",
+      "type": "integer",
+      "meaning": "Count of literal '%' in url component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (%) in URL"
+    },
+    {
+      "name": "qty_tld_url",
+      "type": "integer",
+      "meaning": "Upstream describes top-level-domain length; observed values suggest ambiguity (first row value 1). Exact definition is not verified.",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "top-level-domain length"
+    },
+    {
+      "name": "length_url",
+      "type": "integer",
+      "meaning": "Length of URL; treatment of scheme/encoding unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "URL length"
+    },
+    {
+      "name": "qty_dot_domain",
+      "type": "integer",
+      "meaning": "Count of literal '.' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (.) in domain"
+    },
+    {
+      "name": "qty_hyphen_domain",
+      "type": "integer",
+      "meaning": "Count of literal '-' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (-) in domain"
+    },
+    {
+      "name": "qty_underline_domain",
+      "type": "integer",
+      "meaning": "Count of literal '_' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (_) in domain"
+    },
+    {
+      "name": "qty_slash_domain",
+      "type": "integer",
+      "meaning": "Count of literal '/' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (/) in domain"
+    },
+    {
+      "name": "qty_questionmark_domain",
+      "type": "integer",
+      "meaning": "Count of literal '?' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (?) in domain"
+    },
+    {
+      "name": "qty_equal_domain",
+      "type": "integer",
+      "meaning": "Count of literal '=' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (=) in domain"
+    },
+    {
+      "name": "qty_at_domain",
+      "type": "integer",
+      "meaning": "Count of literal '@' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (@) in domain"
+    },
+    {
+      "name": "qty_and_domain",
+      "type": "integer",
+      "meaning": "Count of literal '&' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (&) in domain"
+    },
+    {
+      "name": "qty_exclamation_domain",
+      "type": "integer",
+      "meaning": "Count of literal '!' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (!) in domain"
+    },
+    {
+      "name": "qty_space_domain",
+      "type": "integer",
+      "meaning": "Count of literal ' ' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ( ) in domain"
+    },
+    {
+      "name": "qty_tilde_domain",
+      "type": "integer",
+      "meaning": "Count of literal '~' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (~) in domain"
+    },
+    {
+      "name": "qty_comma_domain",
+      "type": "integer",
+      "meaning": "Count of literal ',' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (,) in domain"
+    },
+    {
+      "name": "qty_plus_domain",
+      "type": "integer",
+      "meaning": "Count of literal '+' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (+) in domain"
+    },
+    {
+      "name": "qty_asterisk_domain",
+      "type": "integer",
+      "meaning": "Count of literal '*' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (*) in domain"
+    },
+    {
+      "name": "qty_hashtag_domain",
+      "type": "integer",
+      "meaning": "Count of literal '#' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (#) in domain"
+    },
+    {
+      "name": "qty_dollar_domain",
+      "type": "integer",
+      "meaning": "Count of literal '$' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ($) in domain"
+    },
+    {
+      "name": "qty_percent_domain",
+      "type": "integer",
+      "meaning": "Count of literal '%' in domain component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (%) in domain"
+    },
+    {
+      "name": "qty_vowels_domain",
+      "type": "integer",
+      "meaning": "Count of vowels in domain; parsing and case rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count vowels in domain"
+    },
+    {
+      "name": "domain_length",
+      "type": "integer",
+      "meaning": "Length of domain string; parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "domain length"
+    },
+    {
+      "name": "domain_in_ip",
+      "type": "integer",
+      "meaning": "Indicator that domain is represented as an IP address",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "URL domain in IP address format"
+    },
+    {
+      "name": "server_client_domain",
+      "type": "integer",
+      "meaning": "Indicator for server/client terms in domain; exact rule unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "domain contains the keywords \"server\" or \"client\""
+    },
+    {
+      "name": "qty_dot_directory",
+      "type": "integer",
+      "meaning": "Count of literal '.' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (.) in directory"
+    },
+    {
+      "name": "qty_hyphen_directory",
+      "type": "integer",
+      "meaning": "Count of literal '-' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (-) in directory"
+    },
+    {
+      "name": "qty_underline_directory",
+      "type": "integer",
+      "meaning": "Count of literal '_' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (_) in directory"
+    },
+    {
+      "name": "qty_slash_directory",
+      "type": "integer",
+      "meaning": "Count of literal '/' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (/) in directory"
+    },
+    {
+      "name": "qty_questionmark_directory",
+      "type": "integer",
+      "meaning": "Count of literal '?' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (?) in directory"
+    },
+    {
+      "name": "qty_equal_directory",
+      "type": "integer",
+      "meaning": "Count of literal '=' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (=) in directory"
+    },
+    {
+      "name": "qty_at_directory",
+      "type": "integer",
+      "meaning": "Count of literal '@' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (@) in directory"
+    },
+    {
+      "name": "qty_and_directory",
+      "type": "integer",
+      "meaning": "Count of literal '&' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (&) in directory"
+    },
+    {
+      "name": "qty_exclamation_directory",
+      "type": "integer",
+      "meaning": "Count of literal '!' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (!) in directory"
+    },
+    {
+      "name": "qty_space_directory",
+      "type": "integer",
+      "meaning": "Count of literal ' ' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ( ) in directory"
+    },
+    {
+      "name": "qty_tilde_directory",
+      "type": "integer",
+      "meaning": "Count of literal '~' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (~) in directory"
+    },
+    {
+      "name": "qty_comma_directory",
+      "type": "integer",
+      "meaning": "Count of literal ',' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (,) in directory"
+    },
+    {
+      "name": "qty_plus_directory",
+      "type": "integer",
+      "meaning": "Count of literal '+' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (+) in directory"
+    },
+    {
+      "name": "qty_asterisk_directory",
+      "type": "integer",
+      "meaning": "Count of literal '*' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (*) in directory"
+    },
+    {
+      "name": "qty_hashtag_directory",
+      "type": "integer",
+      "meaning": "Count of literal '#' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (#) in directory"
+    },
+    {
+      "name": "qty_dollar_directory",
+      "type": "integer",
+      "meaning": "Count of literal '$' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ($) in directory"
+    },
+    {
+      "name": "qty_percent_directory",
+      "type": "integer",
+      "meaning": "Count of literal '%' in directory component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (%) in directory"
+    },
+    {
+      "name": "directory_length",
+      "type": "integer",
+      "meaning": "Length of directory component; exact path boundary unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "directory length"
+    },
+    {
+      "name": "qty_dot_file",
+      "type": "integer",
+      "meaning": "Count of literal '.' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (.) in file"
+    },
+    {
+      "name": "qty_hyphen_file",
+      "type": "integer",
+      "meaning": "Count of literal '-' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (-) in file"
+    },
+    {
+      "name": "qty_underline_file",
+      "type": "integer",
+      "meaning": "Count of literal '_' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (_) in file"
+    },
+    {
+      "name": "qty_slash_file",
+      "type": "integer",
+      "meaning": "Count of literal '/' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (/) in file"
+    },
+    {
+      "name": "qty_questionmark_file",
+      "type": "integer",
+      "meaning": "Count of literal '?' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (?) in file"
+    },
+    {
+      "name": "qty_equal_file",
+      "type": "integer",
+      "meaning": "Count of literal '=' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (=) in file"
+    },
+    {
+      "name": "qty_at_file",
+      "type": "integer",
+      "meaning": "Count of literal '@' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (@) in file"
+    },
+    {
+      "name": "qty_and_file",
+      "type": "integer",
+      "meaning": "Count of literal '&' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (&) in file"
+    },
+    {
+      "name": "qty_exclamation_file",
+      "type": "integer",
+      "meaning": "Count of literal '!' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (!) in file"
+    },
+    {
+      "name": "qty_space_file",
+      "type": "integer",
+      "meaning": "Count of literal ' ' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ( ) in file"
+    },
+    {
+      "name": "qty_tilde_file",
+      "type": "integer",
+      "meaning": "Count of literal '~' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (~) in file"
+    },
+    {
+      "name": "qty_comma_file",
+      "type": "integer",
+      "meaning": "Count of literal ',' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (,) in file"
+    },
+    {
+      "name": "qty_plus_file",
+      "type": "integer",
+      "meaning": "Count of literal '+' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (+) in file"
+    },
+    {
+      "name": "qty_asterisk_file",
+      "type": "integer",
+      "meaning": "Count of literal '*' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (*) in file"
+    },
+    {
+      "name": "qty_hashtag_file",
+      "type": "integer",
+      "meaning": "Count of literal '#' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (#) in file"
+    },
+    {
+      "name": "qty_dollar_file",
+      "type": "integer",
+      "meaning": "Count of literal '$' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ($) in file"
+    },
+    {
+      "name": "qty_percent_file",
+      "type": "integer",
+      "meaning": "Count of literal '%' in file component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (%) in file"
+    },
+    {
+      "name": "file_length",
+      "type": "integer",
+      "meaning": "Length of file component; exact path boundary unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "file length"
+    },
+    {
+      "name": "qty_dot_params",
+      "type": "integer",
+      "meaning": "Count of literal '.' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (.) in parameters"
+    },
+    {
+      "name": "qty_hyphen_params",
+      "type": "integer",
+      "meaning": "Count of literal '-' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (-) in parameters"
+    },
+    {
+      "name": "qty_underline_params",
+      "type": "integer",
+      "meaning": "Count of literal '_' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (_) in parameters"
+    },
+    {
+      "name": "qty_slash_params",
+      "type": "integer",
+      "meaning": "Count of literal '/' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (/) in parameters"
+    },
+    {
+      "name": "qty_questionmark_params",
+      "type": "integer",
+      "meaning": "Count of literal '?' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (?) in parameters"
+    },
+    {
+      "name": "qty_equal_params",
+      "type": "integer",
+      "meaning": "Count of literal '=' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (=) in parameters"
+    },
+    {
+      "name": "qty_at_params",
+      "type": "integer",
+      "meaning": "Count of literal '@' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (@) in parameters"
+    },
+    {
+      "name": "qty_and_params",
+      "type": "integer",
+      "meaning": "Count of literal '&' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (&) in parameters"
+    },
+    {
+      "name": "qty_exclamation_params",
+      "type": "integer",
+      "meaning": "Count of literal '!' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (!) in parameters"
+    },
+    {
+      "name": "qty_space_params",
+      "type": "integer",
+      "meaning": "Count of literal ' ' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ( ) in parameters"
+    },
+    {
+      "name": "qty_tilde_params",
+      "type": "integer",
+      "meaning": "Count of literal '~' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (~) in parameters"
+    },
+    {
+      "name": "qty_comma_params",
+      "type": "integer",
+      "meaning": "Count of literal ',' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (,) in parameters"
+    },
+    {
+      "name": "qty_plus_params",
+      "type": "integer",
+      "meaning": "Count of literal '+' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (+) in parameters"
+    },
+    {
+      "name": "qty_asterisk_params",
+      "type": "integer",
+      "meaning": "Count of literal '*' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (*) in parameters"
+    },
+    {
+      "name": "qty_hashtag_params",
+      "type": "integer",
+      "meaning": "Count of literal '#' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (#) in parameters"
+    },
+    {
+      "name": "qty_dollar_params",
+      "type": "integer",
+      "meaning": "Count of literal '$' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count ($) in parameters"
+    },
+    {
+      "name": "qty_percent_params",
+      "type": "integer",
+      "meaning": "Count of literal '%' in params component; original parsing rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "count (%) in parameters"
+    },
+    {
+      "name": "params_length",
+      "type": "integer",
+      "meaning": "Length of query parameters component; parsing rule unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "parameters length"
+    },
+    {
+      "name": "tld_present_params",
+      "type": "integer",
+      "meaning": "Indicator of top-level-domain occurrence in query parameters; matching rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "TLD presence in arguments"
+    },
+    {
+      "name": "qty_params",
+      "type": "integer",
+      "meaning": "Number of query parameters; parsing rule unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "retain as structural absent-component category (inferred from simultaneous -1 blocks)",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "number of parameters"
+    },
+    {
+      "name": "email_in_url",
+      "type": "integer",
+      "meaning": "Indicator of email address in URL; matching rule unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "lexical candidate, exact upstream equivalence unverified",
+      "upstream_description": "email present in URL"
+    },
+    {
+      "name": "time_response",
+      "type": "number",
+      "meaning": "Domain lookup response time per upstream; timing units and collection procedure not verified",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "search time (response) domain (lookup)"
+    },
+    {
+      "name": "domain_spf",
+      "type": "integer",
+      "meaning": "Domain SPF record indicator; query rules unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "domain has SPF"
+    },
+    {
+      "name": "asn_ip",
+      "type": "integer",
+      "meaning": "Autonomous system number of resolved address; collection time unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "AS Number (or ASN)"
+    },
+    {
+      "name": "time_domain_activation",
+      "type": "integer",
+      "meaning": "Domain activation/expiration time in days per upstream; reference point and failure handling not verified",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "time (in days) of domain activation"
+    },
+    {
+      "name": "time_domain_expiration",
+      "type": "integer",
+      "meaning": "Domain activation/expiration time in days per upstream; reference point and failure handling not verified",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "time (in days) of domain expiration"
+    },
+    {
+      "name": "qty_ip_resolved",
+      "type": "integer",
+      "meaning": "Number of resolved IP addresses",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "number of resolved IPs"
+    },
+    {
+      "name": "qty_nameservers",
+      "type": "integer",
+      "meaning": "Number of name servers",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "number of resolved name servers (NameServers - NS)"
+    },
+    {
+      "name": "qty_mx_servers",
+      "type": "integer",
+      "meaning": "Number of mail exchange servers",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "number of MX Servers"
+    },
+    {
+      "name": "ttl_hostname",
+      "type": "integer",
+      "meaning": "Hostname DNS time-to-live; resolution procedure unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "time-to-live (TTL) value associated with hostname"
+    },
+    {
+      "name": "tls_ssl_certificate",
+      "type": "integer",
+      "meaning": "TLS certificate indicator; exact validity check unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "valid TLS / SSL Certificate"
+    },
+    {
+      "name": "qty_redirects",
+      "type": "integer",
+      "meaning": "Number of redirects; collection protocol unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "number of redirects"
+    },
+    {
+      "name": "url_google_index",
+      "type": "integer",
+      "meaning": "URL search-index indicator; query procedure unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "check if URL is indexed on Google"
+    },
+    {
+      "name": "domain_google_index",
+      "type": "integer",
+      "meaning": "Domain search-index indicator; query procedure unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "convert to missing (assumed unavailable external measurement)",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "check if domain is indexed on Google"
+    },
+    {
+      "name": "url_shortened",
+      "type": "integer",
+      "meaning": "URL shortening indicator; service list unavailable",
+      "missing": "null is imputed by training-only median; all-null record rejected",
+      "minus_one": "not allowed",
+      "browser_support": "requires external lookup and original collection protocol",
+      "upstream_description": "check if URL is shortened"
+    }
+  ],
+  "notes": "Upstream descriptions verified in author repository README at commit 19674806813c1205d8c12bae99c15c5a735a4ac9. Exact extraction and sentinel semantics remain unverified; offline-only contract."
+}

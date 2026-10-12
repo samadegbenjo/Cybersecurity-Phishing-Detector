@@ -1,0 +1,9 @@
+{
+  "repository_sha256": "31f78d1b61e146efc4e05fc84b0474128d5072320b2d687df59e2c78925c528f",
+  "upstream_sha256": "87da36a20c8c1a9d13db5899514071907179c0fe790dc2ea4f0811957d68745d",
+  "byte_identical": false,
+  "parsed_identical": true,
+  "upstream_url": "https://github.com/gregavrbancic/Phishing-Dataset/blob/19674806813c1205d8c12bae99c15c5a735a4ac9/dataset_full.csv",
+  "mendeley": "https://data.mendeley.com/datasets/72ptz43s9v/1",
+  "license": "CC BY 4.0 per Mendeley record"
+}

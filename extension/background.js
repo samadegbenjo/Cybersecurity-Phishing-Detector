@@ -1,3 +1,1 @@
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('Phishing Detection extension installed');
-});
+// Retired: popup-owned requests need no persistent background or service worker.
