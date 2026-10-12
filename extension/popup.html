@@ -8,10 +8,10 @@ button {padding:10px;margin-bottom:12px} p {overflow-wrap:anywhere}
 small {display:block;margin:12px 0}
 </style></head><body>
 <h1>Phishing Research</h1>
-<p>Browser demonstration — no live phishing verdict.</p>
-<button id="evaluate">Observe current URL</button>
+<p>Experimental active-URL assessment plus offline research.</p>
+<button id="evaluate">Evaluate active page</button>
 <label>Evaluate an offline feature record: <input id="record" type="file" accept=".json,application/json"></label>
-<div id="result" role="status" aria-live="polite"><p>Click to inspect a URL, or load an offline record.</p></div>
-<small>User-triggered only. URL observations cannot be mapped reliably to the dataset. Offline scores are uncalibrated; below threshold does not mean safe. The URL is sent only to your local service.</small>
+<div id="result" role="status" aria-live="polite"><p>Click to evaluate the active URL, or load an offline record.</p></div>
+<small>User-triggered, URL-only assessment: HTML and page behavior are not inspected. Scores are uncalibrated; below threshold does not mean safe. Your URL is sent only to the local service.</small>
 <script src="client.js"></script><script src="popup.js"></script>
 </body></html>

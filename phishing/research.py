@@ -13,10 +13,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (accuracy_score, average_precision_score, confusion_matrix,
                              f1_score, precision_score, recall_score, roc_auc_score,
                              precision_recall_curve)
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedGroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from .schema import NAMES, SCHEMA, VERSION, load_csv, normalize_missing
+from .live import LIVE_NAMES, LIVE_SCHEMA
 
 
 def audit(path):
@@ -87,12 +88,27 @@ def choose_threshold(y, score, target=.95):
     return float(thresholds[best]), True
 
 
-def train(path, output, seed=42, target=.95):
+def train(path, output, seed=42, target=.95, mode="offline"):
+    if mode not in ("offline", "live_url"):
+        raise ValueError("unsupported training mode")
     if not 0 < target <= 1:
         raise ValueError('precision target must be in (0,1]')
     df = load_csv(path)
     clean, splits = split_data(df, seed)
-    x = normalize_missing(clean[NAMES])
+    schema = SCHEMA if mode == 'offline' else LIVE_SCHEMA
+    names = NAMES if mode == 'offline' else LIVE_NAMES
+    x = normalize_missing(clean[NAMES])[names]
+    if mode == 'live_url':
+        # Preserve contradictory labels for identical lexical vectors: collisions are real ambiguity.
+        # Group all equal selected-feature vectors to prevent that ambiguity crossing splits.
+        groups = pd.util.hash_pandas_object(x, index=False)
+        folds = list(StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=seed).split(x, clean.phishing, groups))
+        test_pos, val_pos = folds[0][1], folds[1][1]
+        holdout = set(test_pos) | set(val_pos)
+        splits = {'train':sorted(clean.index[[i for i in range(len(clean)) if i not in holdout]].tolist()),
+                  'validation':sorted(clean.index[val_pos].tolist()), 'test':sorted(clean.index[test_pos].tolist())}
+        if any(clean.loc[ids,'phishing'].nunique()!=2 for ids in splits.values()):
+            raise ValueError('group split requires both classes in every partition')
     if x.loc[splits['train']].isna().all().any():
         raise ValueError('training contains an all-missing feature; revise schema rather than fill arbitrary zeros')
     candidates, fitted = {}, {}
@@ -110,7 +126,7 @@ def train(path, output, seed=42, target=.95):
                    candidates[n]['validation']['pr_auc_average_precision']))
     model = fitted[selected]
     threshold = candidates[selected]['validation']['threshold']
-    report = dict(audit=audit(path), schema_version=VERSION, seed=seed, precision_target=target,
+    report = dict(audit=audit(path), schema_version=schema["version"], mode=mode, feature_names=names, seed=seed, precision_target=target,
                   threshold_objective='maximize validation recall subject to precision >= target; fallback 0.5 if infeasible',
                   selection='validation target achieved, then recall (fallback F1), then average precision',
                   candidates=candidates, selected_model=selected,
@@ -120,13 +136,15 @@ def train(path, output, seed=42, target=.95):
                   excluded_rows=len(df)-len(clean), python=platform.python_version(),
                   dependencies={n:importlib.metadata.version(n) for n in ['numpy','pandas','scikit-learn','scipy','joblib','Flask']},
                   pca='not used: no demonstrated benefit; RF does not require scaling',
-                  scope='offline feature records only; no verified browser equivalence')
+                  scope='offline feature records only; no verified browser equivalence' if mode=='offline' else 'active URL lexical-only experimental classifier',
+                  feature_group_isolation=mode=='live_url',
+                  lexical_colliding_label_groups=int(clean.groupby(names,dropna=False).phishing.nunique().gt(1).sum()) if mode=='live_url' else None)
     out = Path(output); out.mkdir(parents=True, exist_ok=True)
     manifest=dict(dataset_sha256=report['audit']['dataset_sha256'], seed=seed, row_indices=splits,
-                  rule='remove conflicting vectors, deduplicate features, stratified 60/20/20; row indices refer to original CSV')
+                  rule='remove raw full-vector conflicts/duplicates; '+('stratified 60/20/20' if mode=='offline' else '5-fold stratified lexical-vector groups: fold 0 test, fold 1 validation, remaining train; subset label collisions retained')+'; indices refer to original CSV')
     (out/'splits.json').write_text(json.dumps(manifest,indent=2)+'\n')
     report['split_manifest_sha256']=hashlib.sha256((out/'splits.json').read_bytes()).hexdigest()
-    joblib.dump(dict(pipeline=model, threshold=threshold, schema=SCHEMA, metadata=report), out/'model.joblib')
+    joblib.dump(dict(pipeline=model, threshold=threshold, schema=schema, metadata=report), out/'model.joblib')
     report['model_sha256']=hashlib.sha256((out/'model.joblib').read_bytes()).hexdigest()
     (out/'metrics.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n')
     return report
@@ -144,4 +162,4 @@ def evaluate(path, output):
         raise ValueError('model checksum differs')
     artifact=joblib.load(out/'model.joblib')  # Trust only artifacts you trained yourself.
     df=load_csv(path); ids=json.loads((out/'splits.json').read_text())['row_indices']['test']
-    return metrics(df.loc[ids,'phishing'], phishing_probability(artifact['pipeline'],normalize_missing(df.loc[ids,NAMES])), artifact['threshold'])
+    return metrics(df.loc[ids,'phishing'], phishing_probability(artifact['pipeline'],normalize_missing(df.loc[ids,NAMES])[[f['name'] for f in artifact['schema']['features']]]), artifact['threshold'])

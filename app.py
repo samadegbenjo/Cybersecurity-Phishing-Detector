@@ -1,4 +1,4 @@
-"""Loopback-only offline inference and URL-observation demonstration API."""
+"""Loopback-only offline inference and active-URL lexical classifier API."""
 import argparse
 import json
 import logging
@@ -9,26 +9,31 @@ from flask import Flask, jsonify, request
 from werkzeug.exceptions import HTTPException
 from phishing.schema import SCHEMA, VERSION, NAMES, validate_features
 from phishing.research import phishing_probability
+from phishing.live import LIVE_NAMES, LIVE_SCHEMA, LIVE_VERSION, LIVE_LIMITATION, extract_url
 
 LIMITATION = 'Offline research model; live URL extraction equivalence is unverified. Scores are uncalibrated and do not guarantee safety.'
 
 
-def create_app(model_path='artifacts/model.joblib', allowed_origins=()):
-    app = Flask(__name__)
-    app.config['MAX_CONTENT_LENGTH'] = 64 * 1024
-    artifact = None
-    if Path(model_path).exists():
-        try:
-            candidate = joblib.load(model_path)  # Never load untrusted pickle/joblib files.
-            if candidate['schema'] != SCHEMA or not 0 <= candidate['threshold'] <= 1:
-                raise ValueError('artifact schema or threshold mismatch')
-            if list(candidate['pipeline'].feature_names_in_) != NAMES:
-                raise ValueError('artifact feature ordering mismatch')
-            if set(candidate['pipeline'].classes_) != {0,1}:
-                raise ValueError('artifact class mapping mismatch')
-            artifact = candidate
-        except Exception:
-            logging.exception('Model could not be loaded; inference disabled')
+def load_artifact(model_path, schema, names):
+    if not Path(model_path).exists():
+        return None
+    try:
+        candidate=joblib.load(model_path)  # Never deserialize artifacts from untrusted sources.
+        if candidate['schema'] != schema or not 0 <= candidate['threshold'] <= 1:
+            raise ValueError('artifact schema/threshold mismatch')
+        if list(candidate['pipeline'].feature_names_in_) != names or set(candidate['pipeline'].classes_) != {0,1}:
+            raise ValueError('artifact features/classes mismatch')
+        return candidate
+    except Exception:
+        logging.exception('Model could not be loaded; inference disabled')
+        return None
+
+
+def create_app(model_path='artifacts/model.joblib', allowed_origins=(), live_model_path='artifacts/live/model.joblib'):
+    app=Flask(__name__)
+    app.config['MAX_CONTENT_LENGTH']=64*1024
+    artifact=load_artifact(model_path,SCHEMA,NAMES)
+    live_artifact=load_artifact(live_model_path,LIVE_SCHEMA,LIVE_NAMES)
     allowed = set(allowed_origins)
 
     @app.before_request
@@ -57,14 +62,16 @@ def create_app(model_path='artifacts/model.joblib', allowed_origins=()):
 
     @app.get('/health')
     def health():
-        return jsonify(status='ok', model_ready=artifact is not None, mode='offline', schema_version=VERSION)
+        return jsonify(status='ok', model_ready=artifact is not None, mode='offline', schema_version=VERSION, live_model_ready=live_artifact is not None,live_schema_version=LIVE_VERSION)
 
     @app.get('/metadata')
     def metadata():
         return jsonify(schema=SCHEMA, model_ready=artifact is not None,
                        model=artifact['metadata']['selected_model'] if artifact else None,
                        threshold=artifact['threshold'] if artifact else None,
-                       limitation=LIMITATION)
+                       limitation=LIMITATION,live=dict(schema=LIVE_SCHEMA,model_ready=live_artifact is not None,
+                           model=live_artifact['metadata']['selected_model'] if live_artifact else None,
+                           threshold=live_artifact['threshold'] if live_artifact else None,limitation=LIVE_LIMITATION))
 
     @app.post('/predict')
     def predict():
@@ -91,6 +98,29 @@ def create_app(model_path='artifacts/model.joblib', allowed_origins=()):
         except Exception:
             app.logger.exception('Prediction failed')
             return jsonify(state='unable',error='prediction_failed'),500
+
+    @app.post('/predict-url')
+    def predict_url():
+        body=request.get_json()
+        try:
+            if not isinstance(body,dict) or set(body)!={'schema_version','url'} or body['schema_version']!=LIVE_VERSION:
+                raise ValueError('request requires live-url-v1 and url only')
+            x=extract_url(body['url'])
+        except (ValueError,TypeError) as exc:
+            return jsonify(state='unable',error=str(exc)),422
+        if live_artifact is None:
+            return jsonify(state='unable',error='live_model_unavailable; train --mode live_url --output artifacts/live'),503
+        try:
+            score=float(phishing_probability(live_artifact['pipeline'],x)[0])
+            if not 0 <= score <= 1: raise ValueError('invalid live score')
+            suspicious=score>=live_artifact['threshold']
+            return jsonify(state='suspicious' if suspicious else 'below_threshold',phishing=suspicious,
+                           risk_score=score,threshold=live_artifact['threshold'],mode='live_url',
+                           schema_version=LIVE_VERSION,feature_count=len(LIVE_NAMES),features=x.iloc[0].astype(int).to_dict(),
+                           limitation=LIVE_LIMITATION)
+        except Exception:
+            app.logger.exception('Live URL prediction failed')
+            return jsonify(state='unable',error='live_prediction_failed'),500
 
     @app.post('/observe')
     def observe():
@@ -119,7 +149,8 @@ def create_app(model_path='artifacts/model.joblib', allowed_origins=()):
 if __name__=='__main__':
     parser=argparse.ArgumentParser()
     parser.add_argument('--model',default='artifacts/model.joblib')
+    parser.add_argument('--live-model',default='artifacts/live/model.joblib')
     parser.add_argument('--extension-id',help='ID from chrome://extensions; enables exact-origin CORS')
     args=parser.parse_args()
     origins=() if args.extension_id is None else ('chrome-extension://'+args.extension_id,)
-    create_app(args.model,origins).run(host='127.0.0.1',port=5000,debug=False)
+    create_app(args.model,origins,args.live_model).run(host='127.0.0.1',port=5000,debug=False)

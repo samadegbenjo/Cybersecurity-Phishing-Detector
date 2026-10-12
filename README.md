@@ -1,99 +1,108 @@
 # Phishing Detection Research Prototype
 
-A reproducible **offline** phishing classification study, with a Manifest V3 browser demonstration. This project does **not** currently classify the active webpage: the supplied CSV contains precomputed features without raw URLs, and exact extraction equivalence has not been established. The demonstration reports real URL observations and an explicit **Unable to evaluate** state. Users can separately load an offline feature-record JSON into the popup to exercise API → preprocessing → model → display.
+A reproducible phishing ML study with **user-triggered active-page URL evaluation** in a Manifest V3 extension, plus the original richer offline feature-record model. The live model uses **39 measured lexical URL features** aligned to the dataset author's extractor; it never fills unavailable DNS/WHOIS fields or reuses the offline model's score. It assesses the current page's URL, **not HTML or page behavior**. A below-threshold result does not guarantee safety.
 
-## Reproduce
+## Setup and reproduce
 
-Tested on Python 3.12.14 and Node 24.19.0. Node is only needed for JavaScript tests; Chrome is needed for manual extension checks. No paid services or remote lookups are required.
+Tested on Python 3.12.14 and Node 24.19.0. Chrome is needed for native extension checks. No paid API, remote lookups or cloud service is required.
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate                 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python model_training.py audit --dataset dataset.csv
-python model_training.py train --dataset dataset.csv --output artifacts --seed 42 --precision-target 0.95
-python model_training.py evaluate --dataset dataset.csv --output artifacts
+python model_training.py audit
+python model_training.py train --seed 42 --precision-target 0.95
+python model_training.py train --mode live_url --output artifacts/live --seed 42 --precision-target 0.95
+python model_training.py evaluate
+python model_training.py evaluate --output artifacts/live
 python -m pytest -q
 node --test tests/extension.test.cjs
-python scripts/check_integration.py       # starts/stops local API; checks real HTTP and failure
-python scripts/export_record.py --row 0 --output artifacts/record.json
-python app.py                           # loopback 127.0.0.1:5000; debug disabled
+python scripts/check_integration.py
+python scripts/export_record.py
+python app.py
 ```
 
-The JavaScript suite without a running server intentionally skips its one live HTTP test; the integration command runs all seven tests. It requires port 5000 to be free. The CSV already included here is sufficient for training. Training regenerates `artifacts/model.joblib`, `metrics.json`, and `splits.json`; generated models are not committed. Load only locally trained/trusted joblib files, which can execute code during deserialization. `dataset_preprocessing.py` now audits only and cannot fit preprocessing on the whole dataset.
+The JavaScript suite without a server skips its two real HTTP tests. The integration script starts/stops the actual API on port 5000, runs all tests, and verifies real failed-request handling. Train both models first and keep port 5000 free. Training produces model.joblib, metrics.json and splits.json in each output directory. Generated model binaries are not committed; regenerate them locally. Deserialize only trusted, locally trained joblib files. `dataset_preprocessing.py` audits only; no learned preprocessing is fitted on the whole dataset.
 
-## Dataset and feature contract
+## Evaluate the active page
 
-The included CSV has 88,647 rows, 111 numeric predictors, and labels 0=legitimate (58,000), 1=phishing (30,647). It has no null cells, but many -1 sentinels, 1,438 duplicate rows, six conflicting feature vectors, and 13 constant predictors. No URL, domain identifier or observation timestamp is present. ASN is a numeric infrastructure identifier; its treatment as a number and shared infrastructure can limit generalization.
+1. Load `extension/` unpacked in Chrome Developer mode at `chrome://extensions`.
+2. Copy the extension ID and run `python app.py --extension-id YOUR_EXTENSION_ID`.
+3. Open a supported HTTP(S) page and click **Evaluate active page** in the popup.
+4. The popup sends that tab's actual URL to the loopback API, which extracts 39 real lexical measurements, applies the separate live pipeline and displays a risk score, threshold, evaluated URL and limitation notice.
+5. Below threshold, suspicious and Unable to evaluate are distinct. Stop the API and repeat: expect Unable to evaluate. Native Chrome permissions still need the checklist below.
+6. You can also load `artifacts/record.json` in the popup to score an offline 111-feature record. That score is explicitly separate from the active URL.
 
-Parsed values, ordered columns and rows **exactly match** the author's `dataset_full.csv` at upstream commit `19674806813c1205d8c12bae99c15c5a735a4ac9`; raw file bytes differ. Both SHA-256 hashes and source evidence are in [reports/provenance.json](reports/provenance.json). Original acquisition history by this project's author is not recorded.
+No content script, DOM scraping, background worker or all-sites permissions are required. Permissions are only `activeTab` and loopback host access; Chrome host patterns cannot limit a host to port 5000, so the application hardcodes that port. Popup-context requests use exact configured extension-origin CORS. URLs are sent only to your local service and are not fetched/resolved or persisted. Text is rendered with `textContent`; timeouts, malformed responses, invalid inputs and unsupported schemes never become benign verdicts. Requests are click-triggered; no continuous monitoring is claimed.
 
-Dataset attribution: Grega Vrbančič (2020), *Phishing Websites Dataset*, Mendeley Data V1, DOI [10.17632/72ptz43s9v.1](https://data.mendeley.com/datasets/72ptz43s9v/1), listed as **CC BY 4.0**. Upstream [repository](https://github.com/gregavrbancic/Phishing-Dataset) and associated paper DOI [10.1016/j.dib.2020.106438](https://doi.org/10.1016/j.dib.2020.106438). The original extension's MIT license is not a license for this third-party dataset. No dataset values were changed by this revision.
+Native Chrome was unavailable in this execution environment. Mocked tab/DOM checks and real Node client → HTTP API → pipeline checks passed, but native loading, activeTab grants, CORS and Local Network Access permission behavior remain unverified. See [docs/BROWSER_CHECKS.md](docs/BROWSER_CHECKS.md). Do not disable browser security protections to claim compatibility.
 
-[docs/FEATURES.md](docs/FEATURES.md) lists every predictor in order, numeric types, upstream descriptions, unavailable extraction details and missing-value policy. The shared machine-readable contract is [phishing/feature_schema.json](phishing/feature_schema.json). Upstream descriptions are available, but exact parsing, URL normalization, external lookup procedures and sentinel rules are not verified. In particular, `qty_tld_url` is described upstream as TLD length but its observed values merit further investigation. Lexical features appear computable in principle; reconstructing them without raw URLs cannot validate training/inference parity. DNS, WHOIS, certificate, index and timing fields require external collection unavailable to a simple page script. Therefore **no fabricated browser feature vector is sent to the classifier**.
+## Dataset and source evidence
 
-Offline null values are explicitly marked and imputed using training medians, with training-learned missingness indicators. External -1 sentinels are assumed unavailable and normalized to missing. Simultaneous -1 blocks in directory/file/query features are assumed absent components and retained; these interpretations are assumptions, not upstream extractor verification. Absent keys, nonnumeric values, nonfinite values, unsupported negative values and all-missing records are rejected. All-missing training columns also cause an error rather than arbitrary zero filling.
+Included dataset.csv: 88,647 rows, 111 numeric predictors, 58,000 legitimate (0), 30,647 phishing (1). No null cells, but many -1 sentinels; 1,438 duplicate rows, six conflicting full vectors and 13 constant predictors. No raw URL, domain identity or timestamp is present. ASN is an infrastructure identifier, and correlations with it may limit generalization.
 
-## Evaluation protocol and actual results
+Every parsed value, row and ordered column matches the author's dataset_full.csv at upstream commit `19674806813c1205d8c12bae99c15c5a735a4ac9`; bytes differ. [reports/provenance.json](reports/provenance.json) records source links and both checksums. Original acquisition history by this project's author remains unrecorded.
 
-Remove all vectors with conflicting labels, then deduplicate remaining feature vectors before a seeded stratified 60/20/20 raw split. This excludes 1,450 rows and leaves 87,197: training 52,318, validation 17,439, test 17,440. Exact feature duplicates cannot cross splits. **Domain/campaign overlap and temporal leakage remain unmeasurable without identifiers.** These are random-record benchmark results, not deployment estimates.
+Attribution: Grega Vrbančič (2020), *Phishing Websites Dataset*, Mendeley Data V1, DOI [10.17632/72ptz43s9v.1](https://data.mendeley.com/datasets/72ptz43s9v/1), listed as **CC BY 4.0**. Author's [dataset repository](https://github.com/gregavrbancic/Phishing-Dataset); paper DOI [10.1016/j.dib.2020.106438](https://doi.org/10.1016/j.dib.2020.106438). The extension's MIT license does not license third-party data. Dataset values were not changed by this revision.
 
-A logistic-regression baseline uses training-only median imputation, missingness indicators and StandardScaler. Random Forest uses the same imputation without scaling. PCA is omitted: no demonstrated benefit supports its use, and RF does not need scaling. Fixed model configurations are reported; there is no hyperparameter search. Select each candidate's threshold to maximize validation recall subject to precision >=95% and at least one positive prediction; if infeasible, explicitly report failure and use 0.5. Select the model using validation feasibility, then recall (fallback F1), then average precision. Do not refit on validation after selection. Evaluate only the selected frozen model on test.
+The author's [URL extractor](https://github.com/gregavrbancic/url-feature-extractor/tree/15545d8186e0efd02fd879aee394dcffb9296933) supplies a computable lexical contract for the separate live model. Eight controlled URLs × 39 values matched isolated upstream pure functions. One important detail: URL counts operate on `netloc + path + params + query + fragment`, excluding scheme and separators, not on the entire visible URL. This verifies selected code semantics; it does not prove extraction revision/procedure for every historical dataset row. Browser normalization may produce distribution shifts.
 
-| Candidate | Validation precision | Validation recall | Validation F1 | Threshold |
+[docs/LIVE_FEATURES.md](docs/LIVE_FEATURES.md) documents exact rules, parity reproduction, selected columns and live evaluation; [phishing/live_schema.json](phishing/live_schema.json) is the machine-readable ordered live contract. TLD lists, component-absence encodings, email regex and all external lookup features are excluded from the live model. The source clarifies that `qty_tld_url` counts TLD occurrences despite an upstream README “length” description; it remains excluded.
+
+[docs/FEATURES.md](docs/FEATURES.md) and [phishing/feature_schema.json](phishing/feature_schema.json) retain the offline 111-field contract. Offline nulls are explicit and imputed with training medians; external -1 sentinels are assumed missing, while simultaneous directory/file/query -1 blocks are assumed absent components and retained. These are documented assumptions. Missing keys, invalid types/ranges, nonfinite values and all-null records are rejected; all-null training columns fail rather than receive arbitrary zeros. Live requests have **no missing feature values**; zero counts are actual measurements.
+
+## Defensible evaluation
+
+Both modes remove original full-vector conflicting labels and deduplicate remaining full vectors, leaving 87,197 records. Offline: seeded stratified 60/20/20 raw split (52,318/17,439/17,440). Live: retain contradictory labels for selected-feature collisions (1,069 groups), keep equal 39-feature vectors in the same partition via five-fold StratifiedGroupKFold, and designate fold 0 test, fold 1 validation, other folds training (52,319/17,438/17,440). This avoids selected-vector overlap; **domain/campaign and temporal isolation remain unverified**. Raw indices and group rules are saved.
+
+Compare logistic regression and RF using training-only median imputation/missingness indicators; the baseline adds StandardScaler, RF does not need scaling. No PCA or hyperparameter search. Select thresholds using validation only: maximize recall subject to precision >=95% with nonzero positive predictions; report failure and fall back to 0.5 if infeasible. Select the model by validation feasibility, then recall (fallback F1), then average precision. Do not refit on validation. Test only the frozen selected model. Neither mode changed thresholds after test evaluation.
+
+| Mode / candidate | Validation precision | Recall | F1 | Threshold |
 |---|---:|---:|---:|---:|
-| Logistic regression | 0.95004 | 0.77337 | 0.85265 | 0.780356 |
-| Random Forest (selected) | 0.95001 | 0.95359 | 0.95180 | 0.495604 |
+| Offline logistic regression | .950040 | .773368 | .852649 | .780356 |
+| Offline RF (selected) | .950008 | .953591 | .951796 | .495604 |
+| Live URL logistic regression | .958964 | .571101 | .715872 | .872246 |
+| Live URL RF (selected) | .950148 | .787764 | .861370 | .712133 |
 
-| Selected-model test metric | Value |
-|---|---:|
-| Precision | 0.948626 |
-| Recall | 0.956871 |
-| F1 | 0.952731 |
-| Accuracy | 0.966800 |
-| PR-AUC (average precision; not trapezoidal area) | 0.989714 |
-| ROC-AUC | 0.994053 |
-| False-positive rate | 0.027861 |
-| Threshold | 0.4956042402315646 |
-| Test legitimate / phishing | 11,342 / 6,098 |
+| Test metric | Offline 111 features | Active URL 39 features |
+|---|---:|---:|
+| Precision | .948626 | .948165 |
+| Recall | .956871 | .800787 |
+| F1 | .952731 | .868267 |
+| Accuracy | .966800 | .915023 |
+| PR-AUC (average precision) | .989714 | .959012 |
+| ROC-AUC | .994053 | .974528 |
+| False-positive rate | .027861 | .023543 |
+| Frozen threshold | .4956042402315646 | .712132751457169 |
+| Test legitimate / phishing | 11,342 / 6,098 | 11,341 / 6,099 |
+| Confusion matrix (actual rows, predicted columns 0/1) | [[11026,316],[263,5835]] | [[11074,267],[1215,4884]] |
 
-Confusion matrix (rows actual 0/1, columns predicted 0/1): `[[11026, 316], [263, 5835]]`. Both candidates achieved the precision target on validation. **The target was not achieved on test (94.86% precision)**; no adjustment was made using test data. Scores are uncalibrated model probabilities, not guaranteed confidence. These measurements cover one seed, one dataset and no independent contemporary, domain-held-out or time-held-out cohort.
+All candidates reached the validation precision objective; **both selected models missed 95% precision on test**. Active URL false negatives are materially higher; never use offline metrics to advertise live performance. This is one historical dataset, one seed, no independent contemporary cohort and no confidence intervals. Probabilities are uncalibrated, not guaranteed confidence. The two modes use different splits and input information, so the table is not a controlled feature ablation.
 
-[reports/metrics.json](reports/metrics.json) contains actual run outputs, seed, dependency versions, checksum, candidate parameters, class counts, split details and all required metrics. [reports/splits.json](reports/splits.json) records original CSV indices. Re-evaluation checks dataset, model and split-manifest checksums; floating-point ranking metrics may vary at insignificant last digits across executions/platforms. Model hash refers to the generated local artifact, which must be retrained rather than downloaded from this repository. [reports/VALIDATION.md](reports/VALIDATION.md) distinguishes execution from assumptions.
+Actual results/versions/seeds/parameters/checksums are in [reports/metrics.json](reports/metrics.json) and [reports/live/metrics.json](reports/live/metrics.json); corresponding splits are in each reports directory. Evaluation verifies dataset, split and model checksums. Models are regenerated, not downloaded; tiny last-digit arithmetic variation is possible. [reports/VALIDATION.md](reports/VALIDATION.md) records what actually ran.
 
 ## API and architecture
 
-`dataset.csv → raw split → training-only sklearn Pipeline → validation selection → frozen model.joblib → test metrics`.
+Offline record → `/predict` → 111-field validation → sentinel handling → saved preprocessing/classifier → phishing class-label lookup → offline threshold.
 
-`offline record → /predict → ordered schema validation → sentinel handling → saved Pipeline → class-label lookup → thresholded score`.
+Active tab URL → `/predict-url` → validated URL parsing → 39 measured lexical features → separate saved pipeline → explicit phishing probability → live threshold → popup score/verdict.
 
-`activeTab URL → /observe → URL measurements → Unable to evaluate (no model prediction)`.
+One reliable Python sklearn Pipeline path replaces ONNX. Each artifact bundles preprocessing, schema, threshold and metadata. Phishing probability uses class label **1**, not an assumed output index. Old artifacts are retained under `legacy/` and are not loaded.
 
-One Python inference path replaces ONNX to eliminate an unverified conversion boundary. Preprocessing, schema and threshold are saved together. Phishing probability is indexed by the explicit class label **1**, not an assumed output position. Old PCA/scaler/ONNX artifacts are retained in `legacy/` for historical inspection only.
+- `GET /health`: independent offline/live model readiness; process health alone does not mean a model is ready.
+- `GET /metadata`: offline and live schema/model/threshold/limitations.
+- `POST /predict`: exactly `{"schema_version":"offline-v1","features":{...111 named fields...}}`.
+- `POST /predict-url`: exactly `{"schema_version":"live-url-v1","url":"https://example.invalid/"}`; API extracts features itself.
+- `POST /observe`: retained nonclassifying URL observation endpoint (`url-observation-v1`). The extension's main button now uses `/predict-url`.
 
-- `GET /health`: process status and model readiness (health alone does not mean inference is ready).
-- `GET /metadata`: full schema, model name, threshold and limitations.
-- `POST /predict`: `{"schema_version":"offline-v1","features":{"qty_dot_url":3,...}}`; exactly 111 named fields, values numeric or null. Unknown fields and old positional arrays are rejected. Below-threshold results mean safety is unverified.
-- `POST /observe`: `{"schema_version":"url-observation-v1","url":"http://127.0.0.1:8000/page"}`. No outgoing fetch, DNS access or prediction.
+Errors have `state: unable` and appropriate status, with no benign classification: 422 invalid contract, 503 missing model, 500 prediction failure. Model/schema/feature-order mismatches disable the affected inference path. Bind is loopback-only, debug off; bodies are size limited and arbitrary website Origins rejected. Exact extension-origin CORS is enabled with `--extension-id`; no-Origin CLI clients work. This is a local research API, not an authenticated public service. Use `--live-model` to change the live artifact location.
 
-Errors return an explicit `state: unable`, an appropriate HTTP status and no benign classification. Inference returns 503 if training has not produced a valid model, 422 for contract violations and 500 for prediction failures. Request bodies are size limited. Arbitrary website Origins are rejected; exact extension-origin CORS can be enabled with `python app.py --extension-id YOUR_EXTENSION_ID`. Command-line clients without an Origin are supported. This is a local research service, not an authenticated public API.
+Official Chrome references: [MV3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3), [permissions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions), [networking](https://developer.chrome.com/docs/extensions/develop/concepts/network-requests), [Local Network Access](https://developer.chrome.com/blog/local-network-access).
 
-## Browser demonstration
+## Contribution and limitations
 
-1. Load `extension/` unpacked from `chrome://extensions` in Developer mode.
-2. Copy its ID and run `python app.py --extension-id YOUR_EXTENSION_ID`.
-3. Visit a controlled HTTP(S) page; click **Observe current URL**. Expect real length/dot/@/HTTPS observations, score **unavailable**, the offline threshold if a model is ready, and **Unable to evaluate**.
-4. Export `artifacts/record.json` using the command above and choose it in the popup. This explicitly evaluates an **offline record**, never the active page.
-5. Stop the API and repeat either operation. Expect **Unable to evaluate**, never a below-threshold result.
+Samuel Adegbenjo is the project author and maintainer. AI coding assistance was used for this revision's leakage fixes, reproducible evaluation, contracts, local inference, tests and active-URL extension integration. Dataset collection and upstream feature design belong to the cited authors; sklearn classifiers are established algorithms. No novel dataset/algorithm is claimed.
 
-MV3 permissions are only `activeTab` and loopback `host_permissions`. Chrome host match patterns cannot restrict a host to port 5000; application requests are hardcoded to that port. No all-sites content scripts, scripting permission or background worker is needed. All networking occurs in the popup extension context, not in page scripts. UI renders external strings with `textContent`. Timeouts, bad HTTP, invalid JSON/responses and unsupported schemes all produce error states. Safe/suspicious/error are represented separately; the apparent safe state is deliberately labeled **below threshold (safety unverified)**.
+See [docs/MODEL_CARD.md](docs/MODEL_CARD.md). The current implementation cannot inspect HTML/forms or visual impersonation and can miss clean-looking malicious URLs, compromised legitimate domains and novel attacks. No domain/time-held-out, calibration, adversarial, independent-source or multi-seed evaluation was conducted. Historical extraction lineage and native browser permissions remain limitations.
 
-Migration references: official Chrome [MV3 migration](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3), [host permissions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions), [extension networking](https://developer.chrome.com/docs/extensions/develop/concepts/network-requests), and [Local Network Access](https://developer.chrome.com/blog/local-network-access). Extension-context host permission and the backend's exact Origin allowlist address cross-origin access; they do not establish that a given Chrome version/policy will permit local-network access. Native Chrome and its permission behavior were **not executed** in this environment. Keep any blocked request as an error; do not disable browser security flags to claim successful validation. See the controlled-page checklist in [docs/BROWSER_CHECKS.md](docs/BROWSER_CHECKS.md).
-
-## Contribution and limits
-
-Samuel Adegbenjo is the project author and maintainer. This revision was implemented with AI coding assistance: it repairs leakage, formalizes the feature contract, adds reproducible comparison/evaluation, robust inference and tests, and replaces unsupported live-detection claims with an honest demonstration. Dataset collection and original feature engineering belong to the cited dataset authors; the classifiers are established sklearn algorithms. This is engineering and evaluation work, not a claim of a novel algorithm or dataset.
-
-See [docs/MODEL_CARD.md](docs/MODEL_CARD.md). Generalization to new campaigns, prevalence shifts and contemporary browsing remains unknown. False positives and false negatives are expected. Null-heavy records may be out of distribution even when syntactically valid. No calibrated uncertainty, explanation method, production robustness, continuous monitoring or autonomous protection is claimed.
-
-Two-sentence application description: “I developed a reproducible offline phishing-classification prototype that compares logistic regression and Random Forest using training-only preprocessing and validation-selected thresholds. I added a versioned feature contract, robust local inference, automated tests and a Manifest V3 browser demonstration, while documenting dataset provenance and the limits of live detection and generalization.”
+Two-sentence application description: “I developed a reproducible phishing-classification prototype with separate offline and active-URL models, training-only preprocessing and validation-selected thresholds. I implemented a versioned lexical feature extractor and Manifest V3 extension integration, tested local inference and failure handling, and documented dataset provenance, benchmark results and generalization limits.”
